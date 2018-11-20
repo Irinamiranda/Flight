@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Flight Reservation</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="base :: menubar"></div>
+
+<div class="container bg-light">
+    <h2>Flight Reservation</h2>
+
+    <div align="center" th:object="${reservation.flight}">
+        <div class="form-group row">
+            <label for="airportFrom" class="col-sm-2 col-form-label col-form-label-sm">From Airport:</label>
+            <div class="col-sm-10">
+                <input type="text" th:value="*{from.name + ' (' + from.code + ')'}" class="form-control form-control-sm" id="airportFrom"
+                       disabled>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="airportTo" class="col-sm-2 col-form-label col-form-label-sm">To Airport:</label>
+            <div class="col-sm-10">
+                <input type="text" th:value="*{to.name + ' (' + to.code + ')'}" class="form-control form-control-sm" id="airportTo"
+                       disabled>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="flightDate" class="col-sm-2 col-form-label col-form-label-sm">Date:</label>
+            <div class="col-sm-10">
+                <input type="text" th:value="*{departure + ' -> ' + arrival}" class="form-control form-control-sm" id="flightDate"
+                       disabled>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="flightPrice" class="col-sm-2 col-form-label col-form-label-sm">Prices:</label>
+            <div class="col-sm-10">
+                <input type="text" th:value="*{'Economy: $' + priceEconomy + ', Business: $' + priceBusiness}" class="form-control form-control-sm" id="flightPrice"
+                       disabled>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="aircraft" class="col-sm-2 col-form-label col-form-label-sm">Aircraft:</label>
+            <div class="col-sm-10">
+                <input type="text" th:value="*{aircraft}" class="form-control form-control-sm" id="aircraft"
+                       disabled>
+            </div>
+        </div>
+    </div>
+
+    <form action="#"
+          th:action="@{/processReservation}"
+          th:object="${reservation}"
+          method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <input type="hidden" th:field="*{flight}"/>
+
+        <div class="form-group">
+            <label for="inputPassengers">Number of Passengers:</label>
+            <input th:field="*{passengers}" type="number" class="form-control" id="inputPassengers" placeholder="#Passengers">
+            <div th:if="${#fields.hasErrors('passengers')}" class="alert alert-danger" th:errors="*{passengers}"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputClass">Ticket Class:</label>
+            <select class="form-control" th:field="*{ticketClass}" id="inputClass">
+                <option value="Economy">Economy</option>
+                <option value="Business">Business</option>
+            </select>
+            <div th:if="${#fields.hasErrors('ticketClass')}" class="alert alert-danger" th:errors="*{ticketClass}"></div>
+        </div>
+
+        <hr/>
+
+        <button type="submit" class="btn btn-primary">Reserve</button>
+        <a type="submit" class="btn btn-secondary" th:href="@{/}">Cancel</a>
+    </form>
+</div>
+
+<div th:replace="base :: footer"></div>
+
+</body>
+</html>

@@ -22,13 +22,15 @@
             <div class="col">
                 <select class="form-control" th:field="*{from}">
                     <option value="">Depart from:</option>
-                    <option th:each="airport : ${airports}" th:value="${airport.code}" th:text="${airport.code}"></option>
+                    <option th:each="airport : ${airports}" th:value="${airport.code}"
+                            th:text="${airport.code}"></option>
                 </select>
             </div>
             <div class="col">
                 <select class="form-control" th:field="*{to}">
                     <option value="">Arrive to:</option>
-                    <option th:each="airport : ${airports}" th:value="${airport.code}" th:text="${airport.code}"></option>
+                    <option th:each="airport : ${airports}" th:value="${airport.code}"
+                            th:text="${airport.code}"></option>
                 </select>
             </div>
             <div class="col">
@@ -53,6 +55,7 @@
                 <th scope="col">Date</th>
                 <th scope="col">Price</th>
                 <th scope="col">Aircraft</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -64,6 +67,9 @@
                 <td th:text="${flight.departure + ' - ' + flight.arrival }"></td>
                 <td th:text="${'$' + flight.priceEconomy + ' ($' + flight.priceBusiness + ')' }"></td>
                 <td th:text="${flight.aircraft}"></td>
+                <td>
+                    <a type="button" class="btn btn-secondary" th:href="@{/reserveFlight/{id}(id=${flight.id})}">Select</a>
+                </td>
             </tr>
             </tbody>
         </table>

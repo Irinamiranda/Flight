@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,6 +28,9 @@ public class FlightsController {
 
     @Autowired
     FlightRepository flightRepository;
+
+    @Autowired
+    ReservedFlightRepository reservedFlightRepository;
 
     @Autowired
     AirportRepository airportRepository;
@@ -76,5 +81,24 @@ public class FlightsController {
         model.addAttribute("airports", airportRepository.findAll());
 
         return "search";
+    }
+
+    @GetMapping("/reserveFlight/{flightId}")
+    public String reserveFlight(@PathVariable("flightId") Long flightId, Model model, Principal principal) {
+        ReservedFlight reservedFlight = new ReservedFlight(flightRepository.findById(flightId).get(), 1, "Economy");
+        model.addAttribute("reservation", reservedFlight);
+
+        return "reserveFlight";
+    }
+
+    @PostMapping("/processReservation")
+    public String processReservation(@Valid ReservedFlight reservedFlight, BindingResult result, Principal principal) {
+        if (result.hasErrors()) {
+            return "reserveFlight";
+        }
+
+        reservedFlightRepository.save(reservedFlight);
+
+        return "redirect:/";
     }
 }
