@@ -66,6 +66,7 @@ public class DataLoader implements CommandLineRunner {
         flightRepository.save(new Flight("F3513", atl, ord, "2018-11-20", "2018-11-20", 108, 90.9, 234.0, "E75L"));
         flightRepository.save(new Flight("F4978", ord, jfk, "2018-11-20", "2018-11-20", 180, 134.0, 515.8, "E75L"));
         flightRepository.save(new Flight("F0570", jfk, lax, "2018-11-20", "2018-11-20", 200, 145.8, 634.0, "B763"));
+        flightRepository.save(new Flight("F0571", lax, jfk, "2018-11-20", "2018-11-20", 200, 150.8, 650.0, "B763"));
 
     }
 }

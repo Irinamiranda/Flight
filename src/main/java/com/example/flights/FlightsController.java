@@ -124,4 +124,5 @@ public class FlightsController {
         model.addAttribute("reservations", reservations);
         return "reservations";
     }
+
 }

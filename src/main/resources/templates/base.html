@@ -10,6 +10,7 @@
     <a href="/">index</a>
     <a href="/register">addUser</a>
     <a href="/login">login</a>
+    <a href="/reservations">All reservations</a>
 </div>
 
 <div th:fragment="menubar">
@@ -35,6 +36,9 @@
                 </li>
                 <li sec:authorize="isAnonymous()" class="nav-item text-light">
                     <a class="nav-link text-white" href="/register">Register</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item text-light">
+                    <a class="nav-link text-white" href="/reservations">All reservations</a>
                 </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item text-light">
                     <a class="nav-link text-white" href="/logout">Logout</a>
