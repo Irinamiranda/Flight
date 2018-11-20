@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Search Flight</title>
@@ -67,12 +67,21 @@
                 <td th:text="${flight.departure + ' - ' + flight.arrival }"></td>
                 <td th:text="${'$' + flight.priceEconomy + ' ($' + flight.priceBusiness + ')' }"></td>
                 <td th:text="${flight.aircraft}"></td>
-                <td>
-                    <a type="button" class="btn btn-secondary" th:href="@{/reserveFlight/{id}(id=${flight.id})}">Select</a>
+                <td sec:authorize="isAuthenticated()">
+                <a sec:authorize="!hasAuthority('ADMIN')"
+                    type="button" class="btn btn-secondary" th:href="@{/reserveFlight/{id}(id=${flight.id})}">Select</a>
                 </td>
+                <td sec:authorize="isAuthenticated()">
+                    <a sec:authorize="hasAuthority('ADMIN')"
+                     type="button" class="btn btn-secondary" th:href="@{/reserveFlight/{id}(id=${flight.id})}">Delete</a>
+                </td>
+
             </tr>
             </tbody>
         </table>
+        <td sec:authorize="isAuthenticated()">
+            <a sec:authorize="hasAuthority('ADMIN')"
+         class="btn btn-secondary" th:href="@{/addFlight}" role="button">Add Flight</a>
     </div>
 </div>
 
