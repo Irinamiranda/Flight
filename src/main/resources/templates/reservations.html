@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="base :: menubar"></div>
+
+<div class="container">
+    <h1 class="text-center">Welcome to Flights Reservation Demo!</h1>
+</div>
+
+<div th:if="${param.logout}" class="alert alert-info" role="alert">
+    You have been logged out
+</div>
+
+<div class="container">
+    <h3 class="text-center py-3 pl-4 pr-5">Your Reservations</h3>
+
+    <div align="center">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Reservation</th>
+                <th scope="col"></th>
+                <th scope="col">#</th>
+                <th scope="col">#Passengers</th>
+                <th scope="col">Class</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Date</th>
+                <th scope="col">Price</th>
+                <th scope="col">Aircraft</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="reservation: ${reservations}">
+                <tr th:each="reservedFlight: ${reservation.reservedFlights}" th:object="${reservedFlight}">
+                    <td th:text="${reservation.id + ' ' + reservation.date}"></td>
+                    <td th:text="*{id}"></td>
+                    <td th:text="*{flight.flightNumber}"></td>
+                    <td th:text="*{passengers}"></td>
+                    <td th:text="*{ticketClass}"></td>
+                    <td th:text="*{flight.from.code}"></td>
+                    <td th:text="*{flight.to.code}"></td>
+                    <td th:text="*{flight.departure + ' - ' + flight.arrival }"></td>
+                    <td></td>
+                    <td th:text="*{flight.aircraft}"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div th:replace="base :: footer"></div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

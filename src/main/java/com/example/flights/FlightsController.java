@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +30,9 @@ public class FlightsController {
 
     @Autowired
     FlightRepository flightRepository;
+
+    @Autowired
+    ReservationRepository reservationRepository;
 
     @Autowired
     ReservedFlightRepository reservedFlightRepository;
@@ -85,7 +90,9 @@ public class FlightsController {
 
     @GetMapping("/reserveFlight/{flightId}")
     public String reserveFlight(@PathVariable("flightId") Long flightId, Model model, Principal principal) {
-        ReservedFlight reservedFlight = new ReservedFlight(flightRepository.findById(flightId).get(), 1, "Economy");
+        Flight flight = flightRepository.findById(flightId).get();
+
+        ReservedFlight reservedFlight = new ReservedFlight(flight, 1, "Economy", null);
         model.addAttribute("reservation", reservedFlight);
 
         return "reserveFlight";
@@ -97,8 +104,24 @@ public class FlightsController {
             return "reserveFlight";
         }
 
+        User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
+
+        String curDate = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE);
+        Reservation reservation = new Reservation(currentUser, curDate);
+        reservedFlight.setReservation(reservation);
+
+        reservationRepository.save(reservation);
         reservedFlightRepository.save(reservedFlight);
 
-        return "redirect:/";
+        return "redirect:/reservations";
+    }
+
+    @GetMapping("/reservations")
+    public String reservations(Model model, Principal principal){
+        User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
+
+        List<Reservation> reservations = reservationRepository.findByOwner(currentUser);
+        model.addAttribute("reservations", reservations);
+        return "reservations";
     }
 }
