@@ -21,12 +21,13 @@ public class Flight {
     private Integer duration;
     private Double priceEconomy;
     private Double priceBusiness;
+    private Double priceFirstclass;
     private String aircraft;
 
     public Flight() {
     }
 
-    public Flight(String flightNumber, Airport from, Airport to, String departure, String arrival, Integer duration, Double priceEconomy, Double priceBusiness, String aircraft) {
+    public Flight(String flightNumber, Airport from, Airport to, String departure, String arrival, Integer duration, Double priceEconomy, Double priceBusiness, Double priceFirstclass, String aircraft) {
         this.flightNumber = flightNumber;
         this.from = from;
         this.to = to;
@@ -35,6 +36,7 @@ public class Flight {
         this.duration = duration;
         this.priceEconomy = priceEconomy;
         this.priceBusiness = priceBusiness;
+        this.priceFirstclass = priceFirstclass;
         this.aircraft = aircraft;
     }
 
@@ -116,5 +118,13 @@ public class Flight {
 
     public void setAircraft(String aircraft) {
         this.aircraft = aircraft;
+    }
+
+    public Double getPriceFirstclass() {
+        return priceFirstclass;
+    }
+
+    public void setPriceFirstclass(Double priceFirstclass) {
+        this.priceFirstclass = priceFirstclass;
     }
 }

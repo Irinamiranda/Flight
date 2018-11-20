@@ -124,5 +124,12 @@ public class FlightsController {
         model.addAttribute("reservations", reservations);
         return "reservations";
     }
+    /*@GetMapping("/checkout")
+    public String checkout(@Valid ReservedFlight reservedFlight, BindingResult result, Principal principal){
+        User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
+        String total =
+        return "checkout";
+    }*/
+
 
 }

@@ -19,7 +19,7 @@ public class User {
     private String email;
 
     @Column(name = "intro", nullable = true)
-    private String intro;
+    private String citizenship;
 
     @Column(name = "password", nullable = false)
     @Size(min = 3)
@@ -48,14 +48,14 @@ public class User {
     public User() {
     }
 
-    public User(String email, String password, String firstName, String lastName, boolean enabled, String username, String intro) {
+    public User(String email, String password, String firstName, String lastName, boolean enabled, String username, String citizenship) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.enabled = enabled;
         this.username = username;
-        this.intro = intro;
+        this.citizenship = citizenship;
     }
 
     public long getId() {
@@ -123,11 +123,11 @@ public class User {
         this.roles = roles;
     }
 
-    public String getIntro() {
-        return intro;
+    public String getCitizenship() {
+        return citizenship;
     }
 
-    public void setIntro(String intro) {
-        this.intro = intro;
+    public void setCitizenship(String citizenship) {
+        this.citizenship = citizenship;
     }
 }
