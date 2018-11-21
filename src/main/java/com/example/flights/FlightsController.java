@@ -124,6 +124,31 @@ public class FlightsController {
         model.addAttribute("reservations", reservations);
         return "reservations";
     }
+
+    @GetMapping("/addFlight")
+    public String addFlight(Model model, Principal principal) {
+        User currentUser = userRepository.findByUsername(principal.getName());
+        model.addAttribute("user", currentUser);
+
+        Flight flight = new Flight();
+        model.addAttribute("flight", flight);
+        return "addMessage";
+    }
+
+    @PostMapping("/processFlight")
+    public String processFlight(@Valid Flight flight, BindingResult result, Model model, Principal principal) {
+        if (result.hasErrors()) {
+            // -- This is to prevent "Welcome null" message in the header
+            User currentUser = userRepository.findByUsername(principal.getName());
+            model.addAttribute("user", currentUser);
+
+            return "addFlight";
+        }
+
+        flightRepository.save(flight);
+        return "redirect:/flights";
+    }
+
     /*@GetMapping("/checkout")
     public String checkout(@Valid ReservedFlight reservedFlight, BindingResult result, Principal principal){
         User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
