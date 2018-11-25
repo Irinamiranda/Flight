@@ -17,7 +17,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -59,7 +58,10 @@ public class FlightsController {
         User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
         model.addAttribute("user", currentUser);
 
-        model.addAttribute("search", new FlightSearch());
+        FlightSearch flightSearch = new FlightSearch();
+        flightSearch.setDirection("OneWay");
+
+        model.addAttribute("flightSearch", flightSearch);
         model.addAttribute("airports", airportRepository.findAll());
 
         return "search";
@@ -68,8 +70,12 @@ public class FlightsController {
     @PostMapping("/processSearch")
     public String processSearch(@Valid FlightSearch flightSearch, BindingResult result, Model model, Principal principal) {
         if (result.hasErrors()) {
-            User currentUser = userRepository.findByUsername(principal.getName());
+            User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
             model.addAttribute("user", currentUser);
+
+            flightSearch.setDirection(flightSearch.getDirection() == null ? "OneWay" : flightSearch.getDirection());
+            model.addAttribute("airports", airportRepository.findAll());
+
             return "search";
         }
 
@@ -82,6 +88,17 @@ public class FlightsController {
         }
         model.addAttribute("flightOptions", flights);
 
+        if ("RoundTrip".equals(flightSearch.getDirection())) {
+            ArrayList<Flight> flightsBack = new ArrayList<>();
+            for (Flight flight : flightRepository.findAll()) {
+                if (flight.getFrom().getCode().equals(flightSearch.getTo().getCode()) &&
+                        flight.getTo().getCode().equals(flightSearch.getFrom().getCode())) {
+                    flightsBack.add(flight);
+                }
+            }
+            model.addAttribute("flightsBack", flightsBack);
+        }
+
         model.addAttribute("search", flightSearch);
         model.addAttribute("airports", airportRepository.findAll());
 
@@ -92,8 +109,8 @@ public class FlightsController {
     public String reserveFlight(@PathVariable("flightId") Long flightId, Model model, Principal principal) {
         Flight flight = flightRepository.findById(flightId).get();
 
-        ReservedFlight reservedFlight = new ReservedFlight(flight, 1, "Economy", null);
-        model.addAttribute("reservation", reservedFlight);
+        ReservedFlight reservedFlight = new ReservedFlight(flight, 1, "Economy", "OneWay", null);
+        model.addAttribute("reservedFlight", reservedFlight);
 
         return "reserveFlight";
     }
@@ -117,7 +134,7 @@ public class FlightsController {
     }
 
     @GetMapping("/reservations")
-    public String reservations(Model model, Principal principal){
+    public String reservations(Model model, Principal principal) {
         User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
 
         List<Reservation> reservations = reservationRepository.findByOwner(currentUser);
@@ -132,7 +149,7 @@ public class FlightsController {
 
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
-        return "addMessage";
+        return "addFlight";
     }
 
     @PostMapping("/processFlight")

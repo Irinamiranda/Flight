@@ -30,6 +30,7 @@
                 <th scope="col"></th>
                 <th scope="col">#</th>
                 <th scope="col">#Passengers</th>
+                <th scope="col">Direction</th>
                 <th scope="col">Class</th>
                 <th scope="col">From</th>
                 <th scope="col">To</th>
@@ -45,6 +46,7 @@
                     <td th:text="*{id}"></td>
                     <td th:text="*{flight.flightNumber}"></td>
                     <td th:text="*{passengers}"></td>
+                    <td th:text="*{direction}"></td>
                     <td th:text="*{ticketClass}"></td>
                     <td th:text="*{flight.from.code}"></td>
                     <td th:text="*{flight.to.code}"></td>

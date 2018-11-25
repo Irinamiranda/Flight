@@ -13,32 +13,51 @@
 <div class="container bg-light">
     <h2>Flight Reservation</h2>
 
-    <div align="center" th:object="${reservation.flight}">
+    <div align="center" th:object="${reservedFlight.flight}">
+        <div class="form-group row">
+            <label for="direction" class="col-sm-2 col-form-label col-form-label-sm">Direction:</label>
+            <div class="col-sm-10">
+                <input type="text" th:value="${reservedFlight.direction}" class="form-control form-control-sm"
+                       id="direction" disabled>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="flightNumber" class="col-sm-2 col-form-label col-form-label-sm">Flight Number:</label>
+            <div class="col-sm-10">
+                <input type="text" th:value="*{flightNumber}" class="form-control form-control-sm" id="flightNumber"
+                       disabled>
+            </div>
+        </div>
         <div class="form-group row">
             <label for="airportFrom" class="col-sm-2 col-form-label col-form-label-sm">From Airport:</label>
             <div class="col-sm-10">
-                <input type="text" th:value="*{from.name + ' (' + from.code + ')'}" class="form-control form-control-sm" id="airportFrom"
+                <input type="text" th:value="*{from.name + ' (' + from.code + ')'}" class="form-control form-control-sm"
+                       id="airportFrom"
                        disabled>
             </div>
         </div>
         <div class="form-group row">
             <label for="airportTo" class="col-sm-2 col-form-label col-form-label-sm">To Airport:</label>
             <div class="col-sm-10">
-                <input type="text" th:value="*{to.name + ' (' + to.code + ')'}" class="form-control form-control-sm" id="airportTo"
+                <input type="text" th:value="*{to.name + ' (' + to.code + ')'}" class="form-control form-control-sm"
+                       id="airportTo"
                        disabled>
             </div>
         </div>
         <div class="form-group row">
             <label for="flightDate" class="col-sm-2 col-form-label col-form-label-sm">Date:</label>
             <div class="col-sm-10">
-                <input type="text" th:value="*{departure + ' -> ' + arrival}" class="form-control form-control-sm" id="flightDate"
+                <input type="text" th:value="*{departure + ' -> ' + arrival}" class="form-control form-control-sm"
+                       id="flightDate"
                        disabled>
             </div>
         </div>
         <div class="form-group row">
             <label for="flightPrice" class="col-sm-2 col-form-label col-form-label-sm">Prices:</label>
             <div class="col-sm-10">
-                <input type="text" th:value="*{'Economy: $' + priceEconomy + ', Business: $' + priceBusiness + ', First Class: $' + priceFirstclass}" class="form-control form-control-sm" id="flightPrice"
+                <input type="text"
+                       th:value="*{'Economy: $' + priceEconomy + ', Business: $' + priceBusiness + ', First Class: $' + priceFirstclass}"
+                       class="form-control form-control-sm" id="flightPrice"
                        disabled>
             </div>
         </div>
@@ -53,14 +72,16 @@
 
     <form action="#"
           th:action="@{/processReservation}"
-          th:object="${reservation}"
+          th:object="${reservedFlight}"
           method="post">
         <input type="hidden" th:field="*{id}"/>
         <input type="hidden" th:field="*{flight}"/>
+        <input type="hidden" th:field="*{direction}"/>
 
         <div class="form-group">
             <label for="inputPassengers">Number of Passengers:</label>
-            <input th:field="*{passengers}" type="number" class="form-control" id="inputPassengers" placeholder="#Passengers">
+            <input th:field="*{passengers}" type="number" class="form-control" id="inputPassengers"
+                   placeholder="#Passengers">
             <div th:if="${#fields.hasErrors('passengers')}" class="alert alert-danger" th:errors="*{passengers}"></div>
         </div>
 
@@ -71,7 +92,8 @@
                 <option value="Business">Business</option>
                 <option value="First Class">First Class</option>
             </select>
-            <div th:if="${#fields.hasErrors('ticketClass')}" class="alert alert-danger" th:errors="*{ticketClass}"></div>
+            <div th:if="${#fields.hasErrors('ticketClass')}" class="alert alert-danger"
+                 th:errors="*{ticketClass}"></div>
         </div>
 
         <hr/>

@@ -1,19 +1,27 @@
 package com.example.flights;
 
+import javax.validation.constraints.NotNull;
+
 public class FlightSearch {
+    @NotNull
     private Airport from;
+
+    @NotNull
     private Airport to;
+
     private String date;
-    private boolean roundTrip;
+    private String dateReturn;
+    private String direction;
 
     public FlightSearch() {
     }
 
-    public FlightSearch(Airport from, Airport to, String date, boolean roundTrip) {
+    public FlightSearch(Airport from, Airport to, String date, String dateReturn, String direction) {
         this.from = from;
         this.to = to;
         this.date = date;
-        this.roundTrip = roundTrip;
+        this.dateReturn = dateReturn;
+        this.direction = direction;
     }
 
     public Airport getFrom() {
@@ -40,11 +48,19 @@ public class FlightSearch {
         this.date = date;
     }
 
-    public boolean isRoundTrip() {
-        return roundTrip;
+    public String getDateReturn() {
+        return dateReturn;
     }
 
-    public void setRoundTrip(boolean roundTrip) {
-        this.roundTrip = roundTrip;
+    public void setDateReturn(String dateReturn) {
+        this.dateReturn = dateReturn;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 }
