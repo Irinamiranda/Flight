@@ -67,68 +67,99 @@
                         class="btn btn-primary mt-3">Search
                 </button>
             </div>
+            <div class="col py-3">
+                <!--
+                <a th:if="${flightsBack}" type="button" class="btn btn-secondary mt-3"
+                   th:href="@{/reserveFlight/{id1}/{id2}(id1=1, id2=2)}">Book Flights</a>
+                -->
+            </div>
         </div>
     </form>
 
-    <table th:if="${flightOptions}" th:object="${flightOptions}" class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">#</th>
-            <th scope="col">From</th>
-            <th scope="col">To</th>
-            <th scope="col">Date</th>
-            <th scope="col">Price</th>
-            <th scope="col">Aircraft</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="flight: ${flightOptions}">
-            <td th:text="${flight.id}"></td>
-            <td th:text="${flight.flightNumber}"></td>
-            <td th:text="${flight.from.code}"></td>
-            <td th:text="${flight.to.code}"></td>
-            <td th:text="${flight.departure + ' - ' + flight.arrival }"></td>
-            <td th:text="${'$' + flight.priceEconomy + ' ($' + flight.priceBusiness + ')' }"></td>
-            <td th:text="${flight.aircraft}"></td>
-            <td>
-                <a th:if="${flightSearch.direction == 'OneWay'}" type="button" class="btn btn-secondary"
-                   th:href="@{/reserveFlight/{id}(id=${flight.id})}">Select</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <form th:action="@{/reserveFlight}"
+          th:object="${flightSearch}"
+          method="post">
+        <input type="hidden" th:field="*{from}"/>
+        <input type="hidden" th:field="*{to}"/>
+        <input type="hidden" th:field="*{direction}"/>
 
-    <hr th:if="${flightsBack}"/>
-    <table th:if="${flightsBack}" th:object="${flightsBack}" class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">#</th>
-            <th scope="col">From</th>
-            <th scope="col">To</th>
-            <th scope="col">Date</th>
-            <th scope="col">Price</th>
-            <th scope="col">Aircraft</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="flight: ${flightsBack}">
-            <td th:text="${flight.id}"></td>
-            <td th:text="${flight.flightNumber}"></td>
-            <td th:text="${flight.from.code}"></td>
-            <td th:text="${flight.to.code}"></td>
-            <td th:text="${flight.departure + ' - ' + flight.arrival }"></td>
-            <td th:text="${'$' + flight.priceEconomy + ' ($' + flight.priceBusiness + ')' }"></td>
-            <td th:text="${flight.aircraft}"></td>
-            <td>
+        <table th:if="${flightOptions}" th:object="${flightOptions}" class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">#</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Date</th>
+                <th scope="col">Price</th>
+                <th scope="col">Aircraft</th>
+                <th scope="col">
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="flight: ${flightOptions}">
+                <td th:text="${flight.id}"></td>
+                <td th:text="${flight.flightNumber}"></td>
+                <td th:text="${flight.from.code}"></td>
+                <td th:text="${flight.to.code}"></td>
+                <td th:text="${flight.departure + ' - ' + flight.arrival }"></td>
+                <td th:text="${'$' + flight.priceEconomy + ' ($' + flight.priceBusiness + ')' }"></td>
+                <td th:text="${flight.aircraft}"></td>
+                <td>
+                    <a th:if="${flightSearch.direction == 'OneWay'}" type="button"
+                       class="btn btn-outline-secondary btn-sm"
+                       th:href="@{/reserveFlight/{id}(id=${flight.id})}">Select</a>
 
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                    <label th:if="${flightSearch.direction == 'RoundTrip'}" class="btn btn-outline-secondary btn-sm">
+                        <input type="radio" th:field="${flightSearch.selectedFlight}" th:value="${flight.id}"
+                               autocomplete="off"> Select
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <hr th:if="${flightsBack}"/>
+        <table th:if="${flightsBack}" th:object="${flightsBack}" class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">#</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Date</th>
+                <th scope="col">Price</th>
+                <th scope="col">Aircraft</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="flight: ${flightsBack}">
+                <td th:text="${flight.id}"></td>
+                <td th:text="${flight.flightNumber}"></td>
+                <td th:text="${flight.from.code}"></td>
+                <td th:text="${flight.to.code}"></td>
+                <td th:text="${flight.departure + ' - ' + flight.arrival }"></td>
+                <td th:text="${'$' + flight.priceEconomy + ' ($' + flight.priceBusiness + ')' }"></td>
+                <td th:text="${flight.aircraft}"></td>
+                <td>
+                    <label th:if="${flightSearch.direction == 'RoundTrip'}" class="btn btn-outline-secondary btn-sm">
+                        <input type="radio" th:field="${flightSearch.selectedFlightBack}" th:value="${flight.id}"
+                               autocomplete="off"> Select
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="navbar">
+            <span class="mr-auto"></span>
+            <button th:if="${flightsBack}" type="submit" class="btn btn-info">
+                Book Selected Flights
+            </button>
+        </div>
+    </form>
 </div>
 
 <div th:replace="base :: footer"></div>

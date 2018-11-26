@@ -3,9 +3,8 @@ package com.example.flights;
 import com.example.flights.security.User;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Reservation {
@@ -17,7 +16,7 @@ public class Reservation {
     private User owner;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "reservation")
-    private Set<ReservedFlight> reservedFlights = new HashSet<>();
+    private List<ReservedFlight> reservedFlights = new ArrayList<>();
 
     private String date;
 
@@ -45,7 +44,7 @@ public class Reservation {
         this.owner = owner;
     }
 
-    public Set<ReservedFlight> getReservedFlights() {
+    public List<ReservedFlight> getReservedFlights() {
         return reservedFlights;
     }
 

@@ -12,6 +12,8 @@ public class FlightSearch {
     private String date;
     private String dateReturn;
     private String direction;
+    private Flight selectedFlight;
+    private Flight selectedFlightBack;
 
     public FlightSearch() {
     }
@@ -62,5 +64,21 @@ public class FlightSearch {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public Flight getSelectedFlight() {
+        return selectedFlight;
+    }
+
+    public void setSelectedFlight(Flight selectedFlight) {
+        this.selectedFlight = selectedFlight;
+    }
+
+    public Flight getSelectedFlightBack() {
+        return selectedFlightBack;
+    }
+
+    public void setSelectedFlightBack(Flight selectedFlightBack) {
+        this.selectedFlightBack = selectedFlightBack;
     }
 }
