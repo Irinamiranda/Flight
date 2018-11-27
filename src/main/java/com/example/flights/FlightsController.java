@@ -218,9 +218,9 @@ public class FlightsController {
     }
 
     /*@GetMapping("/checkout")
-    public String checkout(@Valid ReservedFlight reservedFlight, BindingResult result, Principal principal){
+    public String checkout(@Valid Reservation reservation, BindingResult result, Principal principal){
         User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
-        String total =
+        String totalPrice =
         return "checkout";
     }*/
 
