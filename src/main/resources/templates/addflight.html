@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>New User</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="base :: menubar"></div>
+<div th:replace="base :: footer"></div>
+<div class="container bg-light py-5">
+    <h2>Register New User</h2>
+
+    <form th:action="@{/processUser}"
+          th:object="${flight}"
+          method="post">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="form-group">
+            <label for="inputFlightNumber">Flight Number:</label>
+            <input th:field="*{flightNumber}" type="text" class="form-control" id="inputFlightNumber"
+                   placeholder="Flight Number">
+            <div th:if="${#fields.hasErrors('flightNumber')}" class="alert alert-danger" th:errors="*{flightNumber}"></div>
+
+            <label for="inputFrom">From:</label>
+            <input th:field="*{from}" type="text" class="form-control" id="inputFrom"
+                   placeholder="From">
+            <div th:if="${#fields.hasErrors('from')}" class="alert alert-danger" th:errors="*{from}"></div>
+
+            <label for="inputTo">To:</label>
+            <input th:field="*{to}" type="text" class="form-control" id="inputTo"
+                   placeholder="To">
+            <div th:if="${#fields.hasErrors('to')}" class="alert alert-danger" th:errors="*{to}"></div>
+
+            <label for="inputDeparture">Departure:</label>
+            <input th:field="*{departure}"
+                      class="form-control" id="inputDeparture" placeholder="Departure">
+            <div th:if="${#fields.hasErrors('departure')}" class="alert alert-danger" th:errors="*{departure}"></div>
+
+            <label for="inputArrival">Arrival:</label>
+            <input th:field="*{arrival}"
+                      class="form-control" id="inputArrival" placeholder="Arrival">
+            <div th:if="${#fields.hasErrors('arrival')}" class="alert alert-danger" th:errors="*{arrival}"></div>
+
+            <label for="inputDuration">Duration:</label>
+            <input th:field="*{duration}"
+                      class="form-control" id="inputDuration" placeholder="Duration">
+            <div th:if="${#fields.hasErrors('duration')}" class="alert alert-danger" th:errors="*{duration}"></div>
+
+            <label for="inputPriceEconomy">Price Economy:</label>
+            <input th:field="*{priceEconomy}"
+                      class="form-control" id="inputPriceEconomy" placeholder="Price Economy">
+            <div th:if="${#fields.hasErrors('priceEconomy')}" class="alert alert-danger" th:errors="*{priceEconomy}"></div>
+
+            <label for="inputPriceBusiness">Price Business:</label>
+            <input th:field="*{priceBusiness}"
+                      class="form-control" id="inputPriceBusiness" placeholder="Price Business">
+            <div th:if="${#fields.hasErrors('priceBusiness')}" class="alert alert-danger" th:errors="*{priceBusiness}"></div>
+
+            <label for="inputPriceFirstclass">Price First Class:</label>
+            <input th:field="*{priceFirstclass}"
+                      class="form-control" id="inputPriceFirstclass" placeholder="Price First Class">
+            <div th:if="${#fields.hasErrors('priceFirstclass')}" class="alert alert-danger" th:errors="*{priceFirstclass}"></div>
+
+
+        </div>
+
+        <!--<hr/>
+
+        <div class="form-group">
+            <label for="inputUsername">Username:</label>
+            <input th:field="*{username}" type="text" class="form-control" id="inputUsername"
+                   placeholder="Username">
+            <div th:if="${#fields.hasErrors('username')}" class="alert alert-danger" th:errors="*{username}"></div>
+
+            <label for="inputPassword">Password:</label>
+            <input th:field="*{password}" type="password" class="form-control" id="inputPassword"
+                   placeholder="Password">
+            <div th:if="${#fields.hasErrors('password')}" class="alert alert-danger" th:errors="*{password}"></div>
+        </div>
+-->
+        <hr/>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

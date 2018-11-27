@@ -66,14 +66,10 @@
                 <td th:text="${flight.to.code}"></td>
                 <td th:text="${flight.departure + ' - ' + flight.arrival }"></td>
                 <td th:text="${'$' + flight.priceEconomy + ' ($' + flight.priceBusiness + ')' }"></td>
-                <td th:text="${flight.aircraft}"></td>
+
                 <td sec:authorize="isAuthenticated()">
                 <a sec:authorize="!hasAuthority('ADMIN')"
                     type="button" class="btn btn-secondary" th:href="@{/reserveFlight/{id}(id=${flight.id})}">Select</a>
-                </td>
-                <td sec:authorize="isAuthenticated()">
-                    <a sec:authorize="hasAuthority('ADMIN')"
-                     type="button" class="btn btn-secondary" th:href="@{/reserveFlight/{id}(id=${flight.id})}">Delete</a>
                 </td>
 
             </tr>

@@ -18,7 +18,7 @@ public class User {
     @Size(min = 3)
     private String email;
 
-    @Column(name = "intro", nullable = true)
+    @Column(name = "citizenship", nullable = true)
     private String citizenship;
 
     @Column(name = "password", nullable = false)

@@ -1,5 +1,6 @@
 package com.example.flights;
 
+import com.example.flights.security.Role;
 import com.example.flights.security.RoleRepository;
 import com.example.flights.security.User;
 import com.example.flights.security.UserRepository;
@@ -45,13 +46,35 @@ public class FlightsController {
         return "login";
     }
 
+    @GetMapping("/register")
+    public String addUser(Model model) {
+        User user = new User();
+
+        Role userRole = roleRepository.findByRole("USER");
+        user.setRoles(Arrays.asList(userRole));
+        user.setEnabled(true);
+
+        model.addAttribute("user", user);
+        return "registerUser";
+    }
+
+    @PostMapping("/processUser")
+    public String processUser(@Valid User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "registerUser";
+        }
+
+        userRepository.save(user);
+        return "redirect:/";
+    }
+
     @RequestMapping("/flights")
     public String index(Model model, Principal principal) {
         User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
         model.addAttribute("user", currentUser);
 
         model.addAttribute("flights", flightRepository.findAll());
-        return "index";
+        return "allFlights";
     }
 
     @RequestMapping("/")
@@ -132,7 +155,7 @@ public class FlightsController {
 
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
-        return "addMessage";
+        return "addFlight";
     }
 
     @PostMapping("/processFlight")

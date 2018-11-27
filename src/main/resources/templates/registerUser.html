@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>New User</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="base :: menubar"></div>
+<div th:replace="base :: footer"></div>
+<div class="container bg-light py-5">
+    <h2>Register New User</h2>
+
+    <form th:action="@{/processUser}"
+          th:object="${user}"
+          method="post">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="form-group">
+            <label for="inputFirstName">First Name:</label>
+            <input th:field="*{firstName}" type="text" class="form-control" id="inputFirstName"
+                   placeholder="First Name">
+            <div th:if="${#fields.hasErrors('firstName')}" class="alert alert-danger" th:errors="*{firstName}"></div>
+
+            <label for="inputLastName">Last Name:</label>
+            <input th:field="*{lastName}" type="text" class="form-control" id="inputLastName"
+                   placeholder="Last Name">
+            <div th:if="${#fields.hasErrors('lastName')}" class="alert alert-danger" th:errors="*{lastName}"></div>
+
+            <label for="inputEmail">EMail:</label>
+            <input th:field="*{email}" type="text" class="form-control" id="inputEmail"
+                   placeholder="EMail">
+            <div th:if="${#fields.hasErrors('email')}" class="alert alert-danger" th:errors="*{email}"></div>
+
+            <label for="inputCitizenship">Citizenship:</label>
+            <input th:field="*{citizenship}" type="text" class="form-control" id="inputCitizenship"
+                   placeholder="Citizenship">
+            <div th:if="${#fields.hasErrors('citizenship')}" class="alert alert-danger" th:errors="*{citizenship}"></div>
+
+        </div>
+
+        <hr/>
+
+        <div class="form-group">
+            <label for="inputUsername">Username:</label>
+            <input th:field="*{username}" type="text" class="form-control" id="inputUsername"
+                   placeholder="Username">
+            <div th:if="${#fields.hasErrors('username')}" class="alert alert-danger" th:errors="*{username}"></div>
+
+            <label for="inputPassword">Password:</label>
+            <input th:field="*{password}" type="password" class="form-control" id="inputPassword"
+                   placeholder="Password">
+            <div th:if="${#fields.hasErrors('password')}" class="alert alert-danger" th:errors="*{password}"></div>
+        </div>
+
+        <hr/>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -10,16 +10,16 @@ public class Airport {
 
     private String name;
     private String location;
-    private Integer capacity;
+
 
     public Airport() {
     }
 
-    public Airport(String code, String name, String location, Integer capacity) {
+    public Airport(String code, String name, String location) {
         this.code = code;
         this.name = name;
         this.location = location;
-        this.capacity = capacity;
+
     }
 
     public String getCode() {
@@ -46,11 +46,5 @@ public class Airport {
         this.location = location;
     }
 
-    public Integer getCapacity() {
-        return capacity;
-    }
 
-    public void setCapacity(Integer capacity) {
-        this.capacity = capacity;
-    }
 }
