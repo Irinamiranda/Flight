@@ -18,7 +18,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -82,7 +81,10 @@ public class FlightsController {
         User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
         model.addAttribute("user", currentUser);
 
-        model.addAttribute("search", new FlightSearch());
+        FlightSearch flightSearch = new FlightSearch();
+        flightSearch.setDirection("OneWay");
+
+        model.addAttribute("flightSearch", flightSearch);
         model.addAttribute("airports", airportRepository.findAll());
 
         return "search";
@@ -91,8 +93,12 @@ public class FlightsController {
     @PostMapping("/processSearch")
     public String processSearch(@Valid FlightSearch flightSearch, BindingResult result, Model model, Principal principal) {
         if (result.hasErrors()) {
-            User currentUser = userRepository.findByUsername(principal.getName());
+            User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
             model.addAttribute("user", currentUser);
+
+            flightSearch.setDirection(flightSearch.getDirection() == null ? "OneWay" : flightSearch.getDirection());
+            model.addAttribute("airports", airportRepository.findAll());
+
             return "search";
         }
 
@@ -105,6 +111,17 @@ public class FlightsController {
         }
         model.addAttribute("flightOptions", flights);
 
+        if ("RoundTrip".equals(flightSearch.getDirection())) {
+            ArrayList<Flight> flightsBack = new ArrayList<>();
+            for (Flight flight : flightRepository.findAll()) {
+                if (flight.getFrom().getCode().equals(flightSearch.getTo().getCode()) &&
+                        flight.getTo().getCode().equals(flightSearch.getFrom().getCode())) {
+                    flightsBack.add(flight);
+                }
+            }
+            model.addAttribute("flightsBack", flightsBack);
+        }
+
         model.addAttribute("search", flightSearch);
         model.addAttribute("airports", airportRepository.findAll());
 
@@ -113,34 +130,85 @@ public class FlightsController {
 
     @GetMapping("/reserveFlight/{flightId}")
     public String reserveFlight(@PathVariable("flightId") Long flightId, Model model, Principal principal) {
+        User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
+
         Flight flight = flightRepository.findById(flightId).get();
 
-        ReservedFlight reservedFlight = new ReservedFlight(flight, 1, "Economy", null);
-        model.addAttribute("reservation", reservedFlight);
+        String curDate = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE);
+        Reservation reservation = new Reservation(currentUser, curDate);
+
+        ReservedFlight reservedFlight = new ReservedFlight(flight, 1, "Economy", "OneWay", reservation);
+        reservation.getReservedFlights().add(reservedFlight);
+
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("reservedFlight", reservedFlight);
+
+        return "reserveFlight";
+    }
+
+    @PostMapping("/reserveFlight")
+    public String reserveFlights(@Valid FlightSearch flightSearch, BindingResult result, Model model, Principal principal) {
+        User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
+
+        if (result.hasErrors()) {
+            model.addAttribute("user", currentUser);
+
+            return "search";
+        }
+
+        String curDate = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE);
+        Reservation reservation = new Reservation(currentUser, curDate);
+
+        ReservedFlight reservedFlight = new ReservedFlight(flightSearch.getSelectedFlight(), 1, "Economy",
+                flightSearch.getDirection(), reservation);
+
+        ReservedFlight reservedFlightBack = new ReservedFlight(flightSearch.getSelectedFlightBack(), 1, "Economy",
+                flightSearch.getDirection(), reservation);
+
+        reservation.getReservedFlights().add(reservedFlight);
+        reservation.getReservedFlights().add(reservedFlightBack);
+
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("reservedFlight", reservedFlight);
+        model.addAttribute("reservedFlightBack", reservedFlightBack);
 
         return "reserveFlight";
     }
 
     @PostMapping("/processReservation")
-    public String processReservation(@Valid ReservedFlight reservedFlight, BindingResult result, Principal principal) {
+    public String processReservation(@Valid Reservation reservation, BindingResult result, Principal principal) {
         if (result.hasErrors()) {
             return "reserveFlight";
         }
 
         User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
 
-        String curDate = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE);
-        Reservation reservation = new Reservation(currentUser, curDate);
-        reservedFlight.setReservation(reservation);
+        ReservedFlight reservedFlight = reservation.getReservedFlights().get(0);
+        ReservedFlight reservedFlightBack = "RoundTrip".equals(reservedFlight.getDirection())
+                && reservation.getReservedFlights().size() > 1 ? reservation.getReservedFlights().get(1) : null;
 
+        String curDate = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE);
+        reservation.setDate(curDate);
+        reservation.setOwner(currentUser);
+        reservation.getReservedFlights().clear();
         reservationRepository.save(reservation);
+
+        reservedFlight.setReservation(reservation);
         reservedFlightRepository.save(reservedFlight);
+
+        if (reservedFlightBack != null) {
+            reservedFlightBack.setReservation(reservation);
+            reservedFlightBack.setPassengers(reservedFlight.getPassengers());
+            reservedFlightBack.setTicketClass(reservedFlight.getTicketClass());
+
+            reservedFlightRepository.save(reservedFlightBack);
+        }
 
         return "redirect:/reservations";
     }
 
     @GetMapping("/reservations")
-    public String reservations(Model model, Principal principal){
+    public String reservations(Model model, Principal principal) {
         User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
 
         List<Reservation> reservations = reservationRepository.findByOwner(currentUser);
@@ -157,7 +225,7 @@ public class FlightsController {
         model.addAttribute("flight", flight);
         return "addFlight";
     }
-git checkout
+
     @PostMapping("/processFlight")
     public String processFlight(@Valid Flight flight, BindingResult result, Model model, Principal principal) {
         if (result.hasErrors()) {
@@ -173,9 +241,9 @@ git checkout
     }
 
     /*@GetMapping("/checkout")
-    public String checkout(@Valid ReservedFlight reservedFlight, BindingResult result, Principal principal){
+    public String checkout(@Valid Reservation reservation, BindingResult result, Principal principal){
         User currentUser = principal != null ? userRepository.findByUsername(principal.getName()) : null;
-        String total =
+        String totalPrice =
         return "checkout";
     }*/
 

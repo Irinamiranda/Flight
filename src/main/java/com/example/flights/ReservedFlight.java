@@ -13,6 +13,7 @@ public class ReservedFlight {
 
     int passengers;
     String ticketClass;
+    String direction;
 
     @ManyToOne
     @JoinColumn(name = "reservation_id", nullable = false)
@@ -21,11 +22,12 @@ public class ReservedFlight {
     public ReservedFlight() {
     }
 
-    public ReservedFlight(Flight flight, int passengers, String ticketClass, Reservation reservation) {
+    public ReservedFlight(Flight flight, int passengers, String ticketClass, String direction, Reservation reservation) {
         this.flight = flight;
         this.passengers = passengers;
         this.ticketClass = ticketClass;
         this.reservation = reservation;
+        this.direction = direction;
     }
 
     public long getId() {
@@ -58,6 +60,14 @@ public class ReservedFlight {
 
     public void setTicketClass(String ticketClass) {
         this.ticketClass = ticketClass;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 
     public Reservation getReservation() {

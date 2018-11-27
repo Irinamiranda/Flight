@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:divth="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Search Flight</title>
@@ -12,73 +12,71 @@
     <h1 class="text-center">Welcome to Flights Reservation Demo!</h1>
 </div>
 
-<div class="container">
+<div class="container mb-5">
     <h3 class="text-center py-3 pl-4 pr-5">All Flights</h3>
 
     <form th:action="@{/processSearch}"
-          th:object="${search}"
+          th:object="${flightSearch}"
           method="post">
+        <div class="row py-2">
+            <div class="col">
+                <div class="btn-group btn-group-toggle">
+                    <button type="submit" name="direction" value="OneWay"
+                            th:class="*{'btn btn-outline-secondary btn-sm' + (direction == 'OneWay' ? ' active' : '')}">
+                        One Way
+                    </button>
+                    <button type="submit" name="direction" value="RoundTrip"
+                            th:class="*{'btn btn-outline-secondary btn-sm' + (direction == 'RoundTrip' ? ' active' : '')}">
+                        Round Trip
+                    </button>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col">
-                <select class="form-control" th:field="*{from}">
+                <label th:for="inputDepartFrom">Depart From:</label>
+                <select id="inputDepartFrom" class="form-control" th:field="*{from}">
                     <option value="">Depart from:</option>
                     <option th:each="airport : ${airports}" th:value="${airport.code}"
-                            th:text="${airport.code}"></option>
+                            th:text="${airport.code + ' | ' + airport.name}"></option>
                 </select>
+                <div th:if="${#fields.hasErrors('from')}" class="alert alert-danger" th:errors="*{from}"></div>
             </div>
             <div class="col">
-                <select class="form-control" th:field="*{to}">
+                <label for="inputArriveTo">Arrive To:</label>
+                <select id="inputArriveTo" class="form-control" th:field="*{to}">
                     <option value="">Arrive to:</option>
                     <option th:each="airport : ${airports}" th:value="${airport.code}"
-                            th:text="${airport.code}"></option>
+                            th:text="${airport.code + ' | ' + airport.name}"></option>
                 </select>
+                <div th:if="${#fields.hasErrors('to')}" class="alert alert-danger" th:errors="*{to}"></div>
             </div>
             <div class="col">
-                <input th:field="*{date}" type="date" class="form-control" placeholder="Departure Date:">
+                <label for="inputDepartureDate">Departure Date:</label>
+                <input id="inputDepartureDate" th:field="*{date}" type="date" class="form-control"
+                       placeholder="Departure Date:">
+                <div th:if="${#fields.hasErrors('date')}" class="alert alert-danger" th:errors="*{date}"></div>
             </div>
-            <div class="col">
-                <button type="submit" class="btn btn-primary">Search</button>
+            <div class="col" th:if="*{direction == 'RoundTrip'}">
+                <label for="inputReturnDate">Return Date:</label>
+                <input id="inputReturnDate" th:field="*{dateReturn}" type="date" class="form-control"
+                       placeholder="Return Date:">
+            </div>
+            <div class="col py-3">
+                <button id="buttonSubmit" type="submit" name="direction" th:value="*{direction}"
+                        class="btn btn-primary mt-3">Search
+                </button>
+            </div>
+            <div class="col py-3">
+                <!--
+                <a th:if="${flightsBack}" type="button" class="btn btn-secondary mt-3"
+                   th:href="@{/reserveFlight/{id1}/{id2}(id1=1, id2=2)}">Book Flights</a>
+                -->
             </div>
         </div>
     </form>
 
-    <hr/>
 
-    <div th:if="${flightOptions}" align="center">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">#</th>
-                <th scope="col">From</th>
-                <th scope="col">To</th>
-                <th scope="col">Date</th>
-                <th scope="col">Price</th>
-                <th scope="col">Aircraft</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="flight: ${flightOptions}">
-                <td th:text="${flight.id}"></td>
-                <td th:text="${flight.flightNumber}"></td>
-                <td th:text="${flight.from.code}"></td>
-                <td th:text="${flight.to.code}"></td>
-                <td th:text="${flight.departure + ' - ' + flight.arrival }"></td>
-                <td th:text="${'$' + flight.priceEconomy + ' ($' + flight.priceBusiness + ')' }"></td>
-
-                <td sec:authorize="isAuthenticated()">
-                <a sec:authorize="!hasAuthority('ADMIN')"
-                    type="button" class="btn btn-secondary" th:href="@{/reserveFlight/{id}(id=${flight.id})}">Select</a>
-                </td>
-
-            </tr>
-            </tbody>
-        </table>
-        <td sec:authorize="isAuthenticated()">
-            <a sec:authorize="hasAuthority('ADMIN')"
-         class="btn btn-secondary" th:href="@{/addFlight}" role="button">Add Flight</a>
-    </div>
 </div>
 
 <div th:replace="base :: footer"></div>

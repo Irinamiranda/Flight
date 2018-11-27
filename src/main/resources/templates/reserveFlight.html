@@ -10,68 +10,67 @@
 <body>
 <div th:replace="base :: menubar"></div>
 
-<div class="container bg-light">
+<div class="container bg-light mb-5" th:object="${reservation}">
     <h2>Flight Reservation</h2>
 
-    <div align="center" th:object="${reservation.flight}">
-        <div class="form-group row">
-            <label for="airportFrom" class="col-sm-2 col-form-label col-form-label-sm">From Airport:</label>
-            <div class="col-sm-10">
-                <input type="text" th:value="*{from.name + ' (' + from.code + ')'}" class="form-control form-control-sm" id="airportFrom"
-                       disabled>
+    <div class="row">
+        <div th:class="${reservedFlightBack == null ? 'col-sm' : 'col-sm-6'}">
+            <div class="form-group row">
+                <label for="direction" class="col-sm-2 col-form-label col-form-label-sm">Direction:</label>
+                <div class="col-sm-10">
+                    <input type="text" th:value="${reservedFlight.direction}" class="form-control form-control-sm"
+                           id="direction" disabled>
+                </div>
             </div>
         </div>
-        <div class="form-group row">
-            <label for="airportTo" class="col-sm-2 col-form-label col-form-label-sm">To Airport:</label>
-            <div class="col-sm-10">
-                <input type="text" th:value="*{to.name + ' (' + to.code + ')'}" class="form-control form-control-sm" id="airportTo"
-                       disabled>
-            </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm">
+            <div th:replace="base :: flightInfo(reservedFlight=${reservedFlight})"></div>
         </div>
-        <div class="form-group row">
-            <label for="flightDate" class="col-sm-2 col-form-label col-form-label-sm">Date:</label>
-            <div class="col-sm-10">
-                <input type="text" th:value="*{departure + ' -> ' + arrival}" class="form-control form-control-sm" id="flightDate"
-                       disabled>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="flightPrice" class="col-sm-2 col-form-label col-form-label-sm">Prices:</label>
-            <div class="col-sm-10">
-                <input type="text" th:value="*{'Economy: $' + priceEconomy + ', Business: $' + priceBusiness + ', First Class: $' + priceFirstclass}" class="form-control form-control-sm" id="flightPrice"
-                       disabled>
-            </div>
-        </div>
-       <!-- <div class="form-group row">
+<!--<<<<<<< HEAD
+       &lt;!&ndash; <div class="form-group row">
             <label for="aircraft" class="col-sm-2 col-form-label col-form-label-sm">Aircraft:</label>
             <div class="col-sm-10">
                 <input type="text" th:value="*{aircraft}" class="form-control form-control-sm" id="aircraft"
                        disabled>
             </div>
-        </div>-->
+        </div>&ndash;&gt;
+
+        <div th:if="${reservedFlightBack}" class="col-sm">
+            <div class="col-sm-6" th:replace="base :: flightInfo(reservedFlight=${reservedFlightBack})"></div>
+        </div>
+>>>>>>> 2f51f771417cbaa2e2f302da51a3947163dced23-->
     </div>
 
     <form action="#"
           th:action="@{/processReservation}"
           th:object="${reservation}"
           method="post">
-        <input type="hidden" th:field="*{id}"/>
-        <input type="hidden" th:field="*{flight}"/>
+        <!--<input type="hidden" th:field="*{id}"/>-->
+        <!--<input type="hidden" th:value="*{reservedFlights}"/>-->
+        <!--<input type="hidden" th:value="*{owner.id}"/>-->
+        <input type="hidden" th:field="*{reservedFlights[0].direction}"/>
+        <input type="hidden" th:field="*{reservedFlights[0].flight}"/>
+        <input type="hidden" th:field="*{reservedFlights[1].direction}"/>
+        <input type="hidden" th:field="*{reservedFlights[1].flight}"/>
 
         <div class="form-group">
             <label for="inputPassengers">Number of Passengers:</label>
-            <input th:field="*{passengers}" type="number" class="form-control" id="inputPassengers" placeholder="#Passengers">
-            <div th:if="${#fields.hasErrors('passengers')}" class="alert alert-danger" th:errors="*{passengers}"></div>
+            <input th:field="*{reservedFlights[0].passengers}" type="number" class="form-control" id="inputPassengers"
+                   placeholder="#Passengers">
+            <!--<div th:if="${#fields.hasErrors('passengers')}" class="alert alert-danger" th:errors="*{reservedFlights[0].passengers}"></div>-->
         </div>
 
         <div class="form-group">
             <label for="inputClass">Ticket Class:</label>
-            <select class="form-control" th:field="*{ticketClass}" id="inputClass">
+            <select class="form-control" th:field="*{reservedFlights[0].ticketClass}" id="inputClass">
                 <option value="Economy">Economy</option>
                 <option value="Business">Business</option>
-                <option value="First Class">First Class</option>
+                <!--<option value="First Class">First Class</option>-->
             </select>
-            <div th:if="${#fields.hasErrors('ticketClass')}" class="alert alert-danger" th:errors="*{ticketClass}"></div>
+            <!--<div th:if="${#fields.hasErrors('ticketClass')}" class="alert alert-danger" th:errors="*{ticketClass}"></div>-->
         </div>
 
         <hr/>

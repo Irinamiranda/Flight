@@ -59,6 +59,7 @@ public class DataLoader implements CommandLineRunner {
         Airport iad = new Airport("IAD", "Washington Dulles International Airport", "Washington, D.C.");
         airportRepository.save(iad);
 
+
         flightRepository.save(new Flight("F2501", jfk, fll, "2018-11-19", "2018-11-19", 180, 120.2, 500.0, 550.0));
         flightRepository.save(new Flight("F2501", jfk, fll, "2018-11-20", "2018-11-20", 181, 119.0, 481.2, 510.0));
         flightRepository.save(new Flight("F9011", jfk, fll, "2018-11-19", "2018-11-19", 195, 110.2, 494.0, 526.0));
@@ -68,5 +69,4 @@ public class DataLoader implements CommandLineRunner {
         flightRepository.save(new Flight("F0570", jfk, lax, "2018-11-20", "2018-11-20", 200, 145.8, 634.0, 690.0));
         flightRepository.save(new Flight("F0571", lax, jfk, "2018-11-20", "2018-11-20", 200, 150.8, 650.0, 710.0));
 
-    }
 }
