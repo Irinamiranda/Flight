@@ -157,7 +157,7 @@ public class FlightsController {
         model.addAttribute("flight", flight);
         return "addFlight";
     }
-
+git checkout
     @PostMapping("/processFlight")
     public String processFlight(@Valid Flight flight, BindingResult result, Model model, Principal principal) {
         if (result.hasErrors()) {
